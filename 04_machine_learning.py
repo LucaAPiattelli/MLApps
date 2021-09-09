@@ -14,6 +14,7 @@ from sklearn.naive_bayes import GaussianNB
 from sklearn.svm import SVC
 from pycaret.classification import * 
 
+
 # url = https://raw.githubusercontent.com/cristiandarioortegayubro/UNI/main/clientes.csv
 
 
@@ -98,28 +99,36 @@ def main():
     elif choice == "Creación de modelo":
         st.header("Creación de Modelo de Machine Learning")
 
-        #st.subheader("Selección de datos")
+        st.subheader("Selección de datos")
         all_columns_names = df.columns.tolist()
-        #selected_columns_x = st.multiselect("Elegí las columnas para predecir", all_columns_names)
+        selected_columns_df = st.multiselect("Elegí las variables para tu dataset", all_columns_names)
+        df_modelo = df[selected_columns_df]
+        st.write(df_modelo)
         selected_columns_y = st.multiselect("Elegí la variable objetivo", all_columns_names)
-        #X = df[selected_columns_x]
         y = selected_columns_y[0]
-        #seed = 23
+    
         #selected_columns_cat = st.multiselect("Elegí las variables categoricas", all_columns_names)
-
-        #st.write("DataFrame predictor", X)
-        #st.write("DataFrame variable objetivo", y)
+        #selected_columns_num = st.multiselect("Elegí las variables numéricas", all_columns_names)
+        
 
         st.subheader("Creación del modelo")
 
         # crear modelo
-        classification = setup(data = df, target = y) #, html = False, verbose = False, silent = True)
-        st.write(classification)
-        #mejor_modelo = compare_models()
-        #st.write(mejor_modelo)
-        # elegir el nombre del modelo a crear
-        #all_models_names = models()
+        classification = setup(data = df_modelo, target = y, silent = True, preprocess = False) #categorical_features = selected_columns_cat, numeric_features = selected_columns_num)
+        mejor_modelo = compare_models()
+        st.write("El mejor modelo es:", mejor_modelo)
 
+        # elegir el nombre del modelo a crear
+        modelos = pd.DataFrame(models())
+        modelos = modelos.reset_index()
+        st.write(modelos)
+        modelo_seleccionado = st.multiselect("Elegí el modelo que queres crear", modelos)
+        modelo = create_model(modelo_seleccionado[0])
+
+        prediccion = predict_model(modelo)
+        st.write(prediccion)
+        
+        # Calcular métrica
 
 
 if __name__ == "__main__":
