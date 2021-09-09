@@ -99,13 +99,13 @@ def main():
         st.header("Creación de Modelo de Machine Learning")
 
         #st.subheader("Selección de datos")
-        ##all_columns_names = df.columns.tolist()
+        all_columns_names = df.columns.tolist()
         #selected_columns_x = st.multiselect("Elegí las columnas para predecir", all_columns_names)
-        ##selected_columns_y = st.multiselect("Elegí la variable objetivo", all_columns_names)
+        selected_columns_y = st.multiselect("Elegí la variable objetivo", all_columns_names)
         #X = df[selected_columns_x]
-        ##y = selected_columns_y[0]
+        y = selected_columns_y[0]
         #seed = 23
-        ##selected_columns_cat = st.multiselect("Elegí las variables categoricas", all_columns_names)
+        #selected_columns_cat = st.multiselect("Elegí las variables categoricas", all_columns_names)
 
         #st.write("DataFrame predictor", X)
         #st.write("DataFrame variable objetivo", y)
@@ -113,8 +113,8 @@ def main():
         st.subheader("Creación del modelo")
 
         # crear modelo
-        #classification = setup(data = df, target = y, html = False, verbose = False, silent = True)
-        #st.write(classification)
+        classification = setup(data = df, target = y) #, html = False, verbose = False, silent = True)
+        st.write(classification)
         #mejor_modelo = compare_models()
         #st.write(mejor_modelo)
         # elegir el nombre del modelo a crear
