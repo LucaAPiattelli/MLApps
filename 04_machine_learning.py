@@ -117,7 +117,7 @@ def main():
 
         # crear modelo
         classification = setup(data = df_modelo, target = y, silent = True, preprocess = False) #categorical_features = selected_columns_cat, numeric_features = selected_columns_num)
-        mejor_modelo = compare_models(include = ["dt", "rf", "et", "xgboost"])
+        mejor_modelo = compare_models(include = ["dt", "rf", "et", "xgboost", "lightgbm"])
         st.write("El mejor modelo es:", mejor_modelo)
 
         # elegir el nombre del modelo a crear
