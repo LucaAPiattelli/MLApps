@@ -117,7 +117,7 @@ def main():
 
         # crear modelo
         classification = setup(data = df_modelo, target = y, silent = True, preprocess = False) #categorical_features = selected_columns_cat, numeric_features = selected_columns_num)
-        mejor_modelo = compare_models(include = ["dt", "rf", "et", "lightgbm"], cross_validation = True)
+        mejor_modelo = compare_models(include = ["dt", "rf", "et", "lightgbm"], cross_validation = False)
         st.write("El mejor modelo es:", mejor_modelo)
 
         # elegir el nombre del modelo a crear
@@ -125,7 +125,7 @@ def main():
         modelos = modelos.reset_index()
         st.write(modelos)
         modelo_seleccionado = st.multiselect("Elegí el modelo que queres crear", modelos)
-        modelo = create_model(modelo_seleccionado[0])
+        modelo = create_model(modelo_seleccionado[0], cross_validation = False)
 
 
         st.subheader("Predicción del modelo")
