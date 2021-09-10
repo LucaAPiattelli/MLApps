@@ -13,6 +13,7 @@ from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from sklearn.naive_bayes import GaussianNB
 from sklearn.svm import SVC
 from pycaret.classification import * 
+from sklearn.metrics import accuracy_score
 
 
 # url = https://raw.githubusercontent.com/cristiandarioortegayubro/UNI/main/clientes.csv
@@ -103,8 +104,9 @@ def main():
         all_columns_names = df.columns.tolist()
         selected_columns_df = st.multiselect("Elegí las variables para tu dataset", all_columns_names)
         df_modelo = df[selected_columns_df]
+        df_columns_names = df_modelo.columns.tolist()
         st.write(df_modelo)
-        selected_columns_y = st.multiselect("Elegí la variable objetivo", all_columns_names)
+        selected_columns_y = st.multiselect("Elegí la variable objetivo", df_columns_names)
         y = selected_columns_y[0]
     
         #selected_columns_cat = st.multiselect("Elegí las variables categoricas", all_columns_names)
@@ -125,11 +127,35 @@ def main():
         modelo_seleccionado = st.multiselect("Elegí el modelo que queres crear", modelos)
         modelo = create_model(modelo_seleccionado[0])
 
+
+        st.subheader("Predicción del modelo")
+        
         prediccion = predict_model(modelo)
         st.write(prediccion)
         
         # Calcular métrica
 
+        st.subheader("Evaluar el modelo")
 
+        y_pred = prediccion["Label"]
+        y_true = prediccion.iloc[:,-3]
+        
+        st.write("El Accuracy del modelo elegido es de: ", accuracy_score(y_true, y_pred))
+
+        st.header("Crear una predicción")
+
+        columnas_modelo = df_modelo.columns
+        st.write("Define el valor de la variable: ", columnas_modelo[0])
+        var_1 = st.number_input("var_1", min_value = min(df_modelo[columnas_modelo[0]]), max_value = max(df_modelo[columnas_modelo[0]]))
+        st.write("Define el valor de la variable: ", columnas_modelo[1])
+        var_2 = st.number_input("var_2", min_value = min(df_modelo[columnas_modelo[1]]), max_value = max(df_modelo[columnas_modelo[1]]))
+        st.write("Define el valor de la variable: ", columnas_modelo[2])
+        var_3 = st.number_input("var_3", min_value = min(df_modelo[columnas_modelo[2]]), max_value = max(df_modelo[columnas_modelo[2]]))
+
+        prediccion_dict = {"Trabajo": var_1, "Edad": var_2, "Salario": var_3, }
+        df_prediccion = pd.DataFrame([prediccion_dict])
+
+        resultado_prediccion = predict_model(modelo, data=df_prediccion)
+        st.write("El resultado de la predicción es: ", resultado_prediccion)
 if __name__ == "__main__":
     main()
